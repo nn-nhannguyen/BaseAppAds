@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">BaseAds</string>
+    <string name="error_network">Error Network</string>
+    <string name="title">Title</string>
+    <string name="ok">OK</string>
+    <string name="please_turn_on_permission_camera">Please allow permission camera!</string>
+    <string name="please_turn_on_permission_storage">Please allow permission storage!</string>
+    <string name="please_turn_on_permission_notification">Please allow permission show notification!</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_ok">OK</string>
+    <string name="message_how_to_turn_on_permission">Turn on permission on menu  \'Permissions\'</string>
+    <string name="text_share_with_app">Share with app</string>
+    <string name="text_request_login">Please login to continue</string>
+    <string name="text_please_feedback">Please Feedback</string>
+    <string name="text_feedback">Feedback</string>
+    <string name="share_by_email">Feedback</string>
+    <string name="can_not_send_email">Can\'t send email</string>
+    <string name="msg_no_internet_exception">No internet connect！</string>
+    <string name="msg_request_time_out_exception">Time out！</string>
+    <string name="message_session_expired">Session expired, please login again</string>
+    <string name="msg_unknown_exception">Unknown exception</string>
+    <string name="loading_ad">Loading ad…</string>
+    <string name="text_ad">Ad</string>
+</resources>

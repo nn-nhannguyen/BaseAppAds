@@ -1,0 +1,156 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Customize your theme here. -->
+        <item name="buttonStyle">@style/AllBtn</item>
+        <item name="editTextStyle">@style/AllEdt</item>
+        <item name="imageButtonStyle">@style/AllImgBtn</item>
+        <!--apply AppCompat-->
+        <item name="android:buttonStyle">@style/AllBtn</item>
+        <item name="android:editTextStyle">@style/AllEdt</item>
+        <item name="android:textViewStyle">@style/AllTextView</item>
+        <item name="android:imageButtonStyle">@style/AllImgBtn</item>
+
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppThemePlayer" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Customize your theme here. -->
+        <item name="buttonStyle">@style/AllBtn</item>
+        <item name="editTextStyle">@style/AllEdt</item>
+        <item name="imageButtonStyle">@style/AllImgBtn</item>
+        <!--apply AppCompat-->
+        <item name="android:buttonStyle">@style/AllBtn</item>
+        <item name="android:editTextStyle">@style/AllEdt</item>
+        <item name="android:textViewStyle">@style/AllTextView</item>
+        <item name="android:imageButtonStyle">@style/AllImgBtn</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="AllDialogTransparent" parent="@android:style/Theme.Translucent">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <!--View component-->styles.xml
+
+    <style name="AllImgBtn" parent="android:Widget.ImageButton">
+        <item name="android:padding">@dimen/vertical_padding</item>
+        <item name="android:background">@drawable/bg_all_img_btn</item>
+    </style>
+
+    <style name="AllTextView" parent="android:Widget.TextView">
+        <item name="android:paddingTop">@dimen/vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding</item>
+        <item name="android:textColor">@color/selector_all_text_dark</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AllEdt" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/bg_all_edt</item>
+        <item name="android:textCursorDrawable">@drawable/bg_all_cursor</item>
+        <item name="android:paddingTop">@dimen/vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding</item>
+        <item name="android:textColor">@color/selector_all_text_primary</item>
+        <item name="android:textColorHint">@color/textHint</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AllBtn" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/bg_all_btn</item>
+        <item name="android:paddingTop">@dimen/vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding</item>
+        <item name="android:textColor">@color/selector_all_text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AllLineWhite">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="AllDialogAppCompatAlert" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowAnimationStyle">@style/AllDialogAnim</item>
+    </style>
+
+    <style name="AllDialogAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="Dialog_Title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Dialog_Text_Msg">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Dialog_Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/bg_img_btn_style</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#167cfb</item>
+    </style>
+
+    <style name="TextAdStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:text">@string/text_ad</item>
+        <item name="android:background">@drawable/bg_text_ad</item>
+    </style>
+
+</resources>

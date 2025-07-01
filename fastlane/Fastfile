@@ -1,0 +1,64 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Run dev environment debug apk build"
+  lane :dev do
+    gradle(task: "assembleDevDebug")
+    firebase_app_distribution(
+                    app: "app_id",
+                    firebase_cli_token: "firebase_cli_token",
+                    release_notes: "Test fastlane auto deploy"
+        )
+  end
+end
+
+platform :android do
+  desc "Run stg environment debug apk build"
+  lane :stg do
+    gradle(task: "assembleStgDebug")
+  end
+end
+
+platform :android do
+  desc "Run prod environment debug apk build"
+  lane :prod do
+    gradle(task: "assembleProductDebug")
+  end
+end
+
+
+platform :android do
+  desc "Run devRelease environment debug apk build"
+  lane :devRelease do
+    gradle(task: "assembleDevRelease")
+  end
+end
+
+platform :android do
+  desc "Run stgRelease environment debug apk build"
+  lane :stgRelease do
+    gradle(task: "assembleStgRelease")
+  end
+end
+
+platform :android do
+  desc "Run prod environment debug apk build"
+  lane :prodRelease do
+    gradle(task: "assembleProductRelease")
+  end
+end

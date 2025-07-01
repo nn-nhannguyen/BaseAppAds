@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#DDDDD0</color>
+    <color name="colorPrimaryDark">#DDDDD0</color>
+    <color name="colorAccent">#DDDDD0</color>
+    <color name="colorAccent80">#DDDDD0</color>
+
+    <color name="colorPressBlackV21">#33000000</color>
+    <color name="colorIdleMask">@android:color/transparent</color>
+
+    <color name="colorPressAccent">@color/colorAccent80</color>
+    <color name="colorIdleAccent">@color/colorAccent</color>
+    <color name="color_Press_BlackV21">#33000000</color>
+    <color name="color_Idle_Mask">@android:color/transparent</color>
+    <color name="color_divider">#BDBDBD</color>
+
+    <color name="colorDivider">#BDBDBD</color>
+
+    <color name="textPrimaryDark">@android:color/black</color>
+    <color name="textDisable">#818181</color>
+    <color name="textHint">#e4e4e4</color>
+    <color name="text_black">@android:color/black</color>
+    <color name="color_text">#000000</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="blue_black_dark">#13171d</color>
+    <color name="orange">#FFA500</color>
+
+    <color name="color_label_input">#707a82</color>
+    <color name="color_text_input_hint">#c2c9cc</color>
+    <color name="color_unselected">#999999</color>
+</resources>

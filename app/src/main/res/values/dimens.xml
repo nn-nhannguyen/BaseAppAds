@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="vertical_padding">10dp</dimen>
+    <dimen name="horizontal_padding">10dp</dimen>
+
+    <dimen name="vertical_space_item">2dp</dimen>
+    <dimen name="horizontal_space_item">7dp</dimen>
+
+    <dimen name="input_label_width_small">120dp</dimen>
+    <dimen name="input_label_margin_right_small">10dp</dimen>
+</resources>

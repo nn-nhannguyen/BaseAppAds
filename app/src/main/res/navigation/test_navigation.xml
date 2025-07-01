@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_navigation"
+    app:startDestination="@+id/testFragment">
+
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.app.base.mvvm.ui.test.fragment.TestFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_test">
+        <action
+            android:id="@+id/actionOpenTestApi"
+            app:destination="@id/testApiFragment" />
+        <action
+            android:id="@+id/actionOpenTestRoom"
+            app:destination="@id/testRoomFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/testApiFragment"
+        android:name="com.app.base.mvvm.ui.api.TestApiFragment"
+        android:label="TestApiFragment"
+        tools:layout="@layout/fragment_test_api" />
+
+    <fragment
+        android:id="@+id/testRoomFragment"
+        android:name="com.app.base.mvvm.ui.room.TestRoomFragment"
+        android:label="TestRoomFragment"
+        tools:layout="@layout/fragment_room" />
+</navigation>

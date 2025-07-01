@@ -1,0 +1,35 @@
+image: docker_image_name # add docker image
+stages:
+  - Lint
+  - BuildDevDebug
+before_script:
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - export DANGER_GITLAB_API_TOKEN= #add your GitLab API token here
+  - chmod +x ./gradlew
+  - touch local.properties
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+    - .gradle/
+lint:
+  stage: Lint
+  interruptible: true
+  script:
+    - ./gradlew lint ktlintCheck
+    - bundle install
+    - ruby -v
+    - bundle exec danger --verbose
+  only:
+    refs:
+      - merge_requests
+build:
+  stage: BuildDevDebug
+  interruptible: true
+  script:
+    - ./gradlew assembleDevDebug
+  artifacts:
+    name: "app-dev-debug"
+    paths:
+      - app/build/outputs/
+  only:
+    - merge_requests

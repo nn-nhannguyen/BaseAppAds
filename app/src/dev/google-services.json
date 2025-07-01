@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "824590469084",
+    "project_id": "ntametaeditpro",
+    "storage_bucket": "ntametaeditpro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824590469084:android:bfc193c73673c05638b119",
+        "android_client_info": {
+          "package_name": "com.app.base.mvvm.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxHszQs2wjnS3nelg8Ingonrl8OQxO3w8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

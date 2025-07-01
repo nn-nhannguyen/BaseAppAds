@@ -1,0 +1,210 @@
+import org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask
+
+plugins {
+  id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
+  id 'dagger.hilt.android.plugin'
+  id 'com.starter.easylauncher'
+  id 'kotlin-parcelize'
+  id 'androidx.navigation.safeargs'
+  id 'org.jlleitschuh.gradle.ktlint'
+  id 'com.google.gms.google-services'
+}
+
+apply from: 'ktlint.gradle'
+
+android {
+  compileSdk 35
+
+  namespace 'com.app.base.mvvm'
+  android.buildFeatures.buildConfig true
+
+  defaultConfig {
+    applicationId "com.app.base.mvvm"
+    minSdkVersion 26
+    targetSdkVersion 35
+    versionCode 1
+    versionName "1.0"
+    multiDexEnabled true
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    applicationVariants.configureEach { variant ->
+      variant.outputs.configureEach {
+        switch (variant.productFlavors[0].name) {
+          case "dev": outputFileName = "App-dev-${new Date().format('yyyyMMdd')}.apk"
+            break
+          case "staging": outputFileName = "App-staging-${new Date().format('yyyyMMdd')}.apk"
+            break
+          case "product": outputFileName = "App-production-${new Date().format('yyyyMMdd')}.apk"
+            break
+        }
+      }
+    }
+  }
+
+  buildTypes {
+    release {
+      shrinkResources true
+      debuggable false
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  signingConfigs {
+    release {
+      def signFile = file("${rootProject.projectDir}/local.properties")
+      def signingProps = new Properties()
+      signingProps.load(new FileInputStream(signFile))
+//            storeFile file("${rootProject.projectDir}/export/keystore/key.jks")
+//            storePassword signingProps['proStorePassword']
+//            keyAlias signingProps['proKeyAlias']
+//            keyPassword signingProps['proKeyAliasPassword']
+    }
+    debug {
+    }
+  }
+
+  flavorDimensions += "version"
+
+  productFlavors {
+    dev {
+      versionNameSuffix = ".dev"
+      applicationIdSuffix ".dev"
+      buildConfigField "String", "BASE_URL", "\"https://5e510330f2c0d300147c034c.mockapi.io/\""
+    }
+    product {
+      buildConfigField "String", "BASE_URL", "\"https://5e510330f2c0d300147c034c.mockapi.io/\""
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+
+  buildFeatures {
+    viewBinding = true
+  }
+
+  dataBinding {
+    enabled = true
+  }
+
+  tasks.withType(GenerateReportsTask).tap {
+    configureEach {
+      project.layout.buildDirectory.file("/reports/ktlint/ktlintMainSourceSetCheck.xml")
+    }
+  }
+}
+
+easylauncher {
+  defaultFlavorNaming true // Use flavor name for default ribbon, instead of the type name
+
+  buildTypes {
+    debug {}
+    release {}
+  }
+
+  productFlavors {
+//        stg {
+//            filters = greenRibbonFilter()
+//        }
+    dev {
+      filters = grayRibbonFilter()
+    }
+  }
+
+  variants {
+    productDebug {
+      filters = orangeRibbonFilter("PROD-DEBUG")
+    }
+//        stgRelease {
+//            filters = blueRibbonFilter("STG-RELEASE")
+//        }
+    devRelease {
+      filters = blueRibbonFilter("DEV-RELEASE")
+    }
+  }
+}
+
+ext {
+  rx_java = '2.2.12'
+  lifecycle_version = '2.6.2'
+}
+
+dependencies {
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'androidx.core:core-ktx:1.12.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+  testImplementation 'junit:junit:4.13.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+  implementation 'com.google.android.material:material:1.11.0-beta01'
+
+  testImplementation "androidx.test:core:1.6.1"
+  testImplementation "org.mockito:mockito-core:5.11.0"
+  testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+  testImplementation "io.mockk:mockk:1.12.2"
+  testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+  testImplementation 'androidx.arch.core:core-testing:2.2.0'
+
+  // Added Dependencies
+  implementation "androidx.recyclerview:recyclerview:1.3.2"
+  implementation 'android.arch.lifecycle:extensions:1.1.1'
+  implementation 'com.github.bumptech.glide:glide:4.15.1'
+  implementation 'androidx.activity:activity-ktx:1.8.0'
+
+
+  //Dagger - Hilt
+  implementation "com.google.dagger:hilt-android:2.48.1"
+  kapt "com.google.dagger:hilt-android-compiler:2.48.1"
+
+  // Networking
+  implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+  implementation "com.squareup.retrofit2:retrofit:2.9.0"
+  implementation "com.squareup.okhttp3:okhttp:4.9.3"
+  implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+
+  //Coroutine
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+
+  // Room
+  implementation "androidx.room:room-runtime:2.6.0"
+  //noinspection KaptUsageInsteadOfKsp
+  kapt "androidx.room:room-compiler:2.6.0"
+  implementation "androidx.room:room-rxjava2:2.6.0"
+  implementation "androidx.room:room-ktx:2.6.0"
+
+  //Rx
+  implementation "io.reactivex.rxjava2:rxjava:$rx_java"
+
+  implementation 'com.intuit.sdp:sdp-android:1.1.1'
+  implementation 'com.r0adkll:slidableactivity:2.0.6'
+
+  implementation "androidx.fragment:fragment-ktx:1.6.1"
+
+  // Navigation
+  def nav_version = "2.7.4"
+  implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+  // Lifecycle
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+
+  implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+  implementation("androidx.security:security-crypto:1.0.0")
+
+  implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
+  implementation("com.google.firebase:firebase-analytics-ktx")
+  implementation 'com.google.android.gms:play-services-ads:23.2.0'
+}

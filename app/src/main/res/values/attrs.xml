@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Header">
+        <attr name="showBack" format="boolean" />
+        <attr name="showTextTitle" format="boolean" />
+        <attr name="showTextRight" format="boolean" />
+        <attr name="showTextLeft" format="boolean" />
+        <attr name="text_title" format="string" />
+        <attr name="text_right" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomImageView">
+        <attr name="defaultHeight" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="InputItem">
+        <attr name="showEditText" format="boolean" />
+        <attr name="showEye" format="boolean" />
+        <attr name="isLabelWrapContent" format="boolean" />
+        <attr name="isPassword" format="boolean" />
+        <attr name="isTextView" format="boolean" />
+        <attr name="text_label" format="string" />
+        <attr name="text_input_hint" format="string" />
+        <attr name="text_input" format="string" />
+    </declare-styleable>
+
+    <string-array name="device_id">
+        <item>F810D8A5187E967FDA818F4F851A1C20</item> //a32
+        <item>8FE2D4A141CE8256D06D0C6732CE325A</item> //m1
+        <item>D52DE5DBD928F72D9FBCB7B2FA70EAAF</item> //m33
+    </string-array>
+</resources>

@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:minWidth="135dp"
+        android:singleLine="true"
+        android:textColor="@color/color_label_input"
+        android:textSize="13sp"
+        tools:text="Hello" />
+
+    <EditText
+        android:id="@+id/edtInput"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/imgEye"
+        android:layout_toRightOf="@+id/tvLabel"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/color_label_input"
+        android:textColorHint="@color/color_text_input_hint"
+        android:textSize="13sp"
+        tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
+
+    <ImageView
+        android:id="@+id/imgEye"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:src="@drawable/bg_selector_img_eye"
+        android:visibility="gone"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray" />
+</RelativeLayout>
