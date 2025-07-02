@@ -1,0 +1,54 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Danger
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/cirruslabs/android-sdk:35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby-full
+          gem install bundler
+          bundle install
+
+      - name: Run Lint & Danger
+        run: |
+          export GRADLE_USER_HOME=$(pwd)/.gradle
+          ./gradlew lint ktlintCheck
+          bundle exec danger --verbose
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+
+  build:
+    name: Build DevDebug APK
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/cirruslabs/android-sdk:35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build APK
+        run: ./gradlew assembleDevDebug
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-dev-debug
+          path: app/build/outputs/
