@@ -1,3 +1,4 @@
+=begin
 gitlab.dismiss_out_of_range_messages
 
 # Ignore inline messages which lay outside a diff's range of PR
@@ -28,3 +29,39 @@ if File.exist?(ktlintPathCheck)
 else
   warn("Lint result file not found: #{ktlintPathCheck}")
 end
+=end
+
+
+# -------------------------------------------
+# -------------------------------------------
+
+# gitlab.dismiss_out_of_range_messages
+
+# PR title check cho WIP/Draft
+warn("PR is classed as Work in Progress") if github.pr_title.include?("[WIP]") || github.pr_title.include?("[Draft]")
+
+# Warn when there is a big PR
+warn("Big PR") if git.lines_of_code > 500
+
+# Skip gradle task
+android_lint.skip_gradle_task = true
+
+# Android Lint
+lint_result_file = "app/build/reports/lint-results-devDebug.xml"
+if File.exist?(lint_result_file)
+  android_lint.report_file = lint_result_file
+else
+  warn("Lint result file not found: #{lint_result_file}")
+end
+android_lint.lint
+
+# Ktlint Checkstyle Format
+checkstyle_format.base_path = Dir.pwd
+ktlintPathCheck = "app/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml"
+
+if File.exist?(ktlintPathCheck)
+  checkstyle_format.report(ktlintPathCheck)
+else
+  warn("Ktlint result file not found: #{ktlintPathCheck}")
+end
+
