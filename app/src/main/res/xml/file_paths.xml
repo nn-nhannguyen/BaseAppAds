@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path
+        name="audio"
+        path="/audio" />
+
+    <files-path
+        name="photo_high_light"
+        path="photo_high_light/" />
+
+    <files-path
+        name="video_folder"
+        path="video_folder/" />
+</paths>
+

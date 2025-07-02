@@ -18,7 +18,7 @@ class LoadingAdsDialog(
     window?.apply {
       setFlags(
         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
       )
       setGravity(Gravity.CENTER)
       val params = attributes.apply {

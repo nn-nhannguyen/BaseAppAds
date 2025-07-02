@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
-class AppSettingsRepository constructor(private val context: Context) :
+@Suppress("SameParameterValue", "unused")
+class AppSettingsRepository(private val context: Context) :
   AppSettingsRepositoryInterface {
   @Keep
   enum class Key {
@@ -15,6 +17,7 @@ class AppSettingsRepository constructor(private val context: Context) :
     THEME_MODE,
     CAN_REQUEST_AD,
     PERSONALIZED,
+    FCM_TOKEN
   }
 
   private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
@@ -32,9 +35,9 @@ class AppSettingsRepository constructor(private val context: Context) :
   }
 
   private fun saveString(key: Key, value: String?) {
-    prefs.edit()
-      .putString(key.name, value)
-      .apply()
+    prefs.edit {
+      putString(key.name, value)
+    }
   }
 
   private fun loadString(key: Key, defaultValue: String?): String? {
@@ -46,7 +49,7 @@ class AppSettingsRepository constructor(private val context: Context) :
   }
 
   private fun saveInt(key: Key, value: Int) {
-    prefs.edit().putInt(key.name, value).apply()
+    prefs.edit { putInt(key.name, value) }
   }
 
   private fun loadLong(key: Key, defaultValue: Long): Long {
@@ -54,7 +57,7 @@ class AppSettingsRepository constructor(private val context: Context) :
   }
 
   private fun saveLong(key: Key, value: Long) {
-    prefs.edit().putLong(key.name, value).apply()
+    prefs.edit { putLong(key.name, value) }
   }
 
   private fun loadBoolean(key: Key, defaultValue: Boolean): Boolean {
@@ -62,7 +65,7 @@ class AppSettingsRepository constructor(private val context: Context) :
   }
 
   private fun saveBoolean(key: Key, value: Boolean) {
-    prefs.edit().putBoolean(key.name, value).apply()
+    prefs.edit { putBoolean(key.name, value) }
   }
 
   private fun contains(key: Key): Boolean {
@@ -70,9 +73,9 @@ class AppSettingsRepository constructor(private val context: Context) :
   }
 
   private fun remove(key: Key) {
-    prefs.edit()
-      .remove(key.name)
-      .apply()
+    prefs.edit {
+      remove(key.name)
+    }
   }
 
   override fun pullAccessToken(): String? {
@@ -109,6 +112,14 @@ class AppSettingsRepository constructor(private val context: Context) :
 
   override fun pullPersonalized(): Boolean {
     return loadBoolean(Key.PERSONALIZED, true)
+  }
+
+  override fun pullFcmToken(): String {
+    return loadString(Key.FCM_TOKEN, "") ?: ""
+  }
+
+  override fun pushFcmToken(token: String) {
+    saveString(Key.FCM_TOKEN, token)
   }
 
   override fun clearAll() {

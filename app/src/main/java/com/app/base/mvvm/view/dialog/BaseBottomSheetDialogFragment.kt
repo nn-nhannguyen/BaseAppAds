@@ -15,7 +15,7 @@ import com.app.base.mvvm.data.source.LoadingState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BaseBottomSheetDialogFragment(
-  @LayoutRes val layoutId: Int,
+  @LayoutRes val layoutId: Int
 ) : BottomSheetDialogFragment(layoutId) {
 
   private lateinit var mDataBinding: ViewDataBinding
@@ -24,11 +24,7 @@ abstract class BaseBottomSheetDialogFragment(
 
   abstract fun applyBinding(viewDataBinding: ViewDataBinding)
 
-  abstract fun onInit(
-    view: View,
-    fragmentArg: Bundle?,
-    saveInstance: Bundle?,
-  )
+  abstract fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?)
 
   abstract fun applyHeightDialog()
 
@@ -48,20 +44,13 @@ abstract class BaseBottomSheetDialogFragment(
     applyHeightDialog()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?,
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     mDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
     applyBinding(mDataBinding)
     return mDataBinding.root
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?,
-  ) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     mDataBinding.lifecycleOwner = viewLifecycleOwner
     onInit(view, arguments, savedInstanceState)
@@ -91,30 +80,33 @@ abstract class BaseBottomSheetDialogFragment(
     baseActivity?.showLoading()
   }
 
-  fun showMessageDialog(
-    message: String,
-    onPositiveButtonListener: () -> Unit,
-  ) {
+  fun showMessageDialog(message: String, onPositiveButtonListener: () -> Unit) {
     baseActivity?.showMessageDialog(message, onPositiveButtonListener)
   }
 
   fun showMessageDialog(
-    title: String, message: String,
-    textNegative: Int, textPositive: Int,
+    title: String,
+    message: String,
+    textNegative: Int,
+    textPositive: Int,
     onNegativeButtonListener: () -> Unit,
     onPositiveButtonListener: () -> Unit
   ) {
     baseActivity?.showMessageDialog(
-      title, message,
-      textNegative, textPositive,
+      title,
+      message,
+      textNegative,
+      textPositive,
       onNegativeButtonListener,
       onPositiveButtonListener
     )
   }
 
   fun showFullDialog(
-    title: Int, message: Int,
-    textNegative: Int, textPositive: Int,
+    title: Int,
+    message: Int,
+    textNegative: Int,
+    textPositive: Int,
     onPositiveButtonListener: () -> Unit
   ) {
     baseActivity?.showFullDialog(title, message, textNegative, textPositive, onPositiveButtonListener)

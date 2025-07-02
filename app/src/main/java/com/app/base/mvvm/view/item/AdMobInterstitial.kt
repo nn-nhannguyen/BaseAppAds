@@ -123,7 +123,6 @@ class AdMobInterstitial {
 
   private fun loadAds(context: Context) {
     if (mInterstitialAd == null && NetworkHelper.isNetworkConnected(context) && !isLoadingAds) {
-
       val isPersonalized = appSettingsRepository?.pullPersonalized()
 
       val adRequest = if (isPersonalized == true) {
@@ -143,7 +142,7 @@ class AdMobInterstitial {
           context,
           context.getString(R.string.ads_full_screen_id),
           adRequest,
-          it,
+          it
         )
       }
       LogUtil.logMessage("AdMob", "loading ad fullscreen")
@@ -173,7 +172,8 @@ class AdMobInterstitial {
       object : LoadingAdsDialog.OnDialogPlayListener {
         override fun onDismiss() {
         }
-      }).apply {
+      }
+    ).apply {
       show()
     }
 
@@ -190,7 +190,6 @@ class AdMobInterstitial {
       isAllowOpen = false
     }, 1000)
   }
-
 
   private fun loadFail() {
     onLoadAdInterstitialListener?.loadFail()

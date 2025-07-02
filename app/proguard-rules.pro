@@ -65,3 +65,43 @@
 -dontwarn org.conscrypt.**
 # A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Gson generic type fix
+-keepattributes *Annotation*
+
+# Retrofit
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Exceptions
+-keep class retrofit2.** { *; }
+-keepclassmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# Dagger / Hilt
+-keep class dagger.** { *; }
+-keep class javax.inject.** { *; }
+-dontwarn dagger.**
+-dontwarn javax.inject.**
+
+# Room
+-keep class androidx.room.** { *; }
+-keepclassmembers class * {
+    @androidx.room.* <methods>;
+}
+
+# Moshi
+-keep class com.squareup.moshi.** { *; }
+-keepclassmembers class * {
+    @com.squareup.moshi.* <fields>;
+    @com.squareup.moshi.* <methods>;
+}
+
+-keep class **_JsonAdapter { *; }
+
+-keep class * extends com.squareup.moshi.JsonAdapter { *; }
+
+-keep class kotlinx.serialization.KSerializer { *; }
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+ -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation

@@ -66,7 +66,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             (activity as BaseActivity).loadRewardAd(true)
           }
         }
-      },
+      }
     )
     dialog.show(childFragmentManager, RequestViewAdDialog::class.java.name)
   }
@@ -168,7 +168,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         override fun loadFailed() {
           context?.let {
-
             if (currentAdAction != AdOpenScreenAction.DEFAULT) {
 //              currentAdAction = AdOpenScreenAction.DEFAULT
 //              (activity as BaseActivity).showMessageDialog(getString(R.string.ad_not_available), {}, true)

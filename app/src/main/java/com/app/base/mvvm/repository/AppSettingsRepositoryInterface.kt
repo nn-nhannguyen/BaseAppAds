@@ -10,9 +10,10 @@ interface AppSettingsRepositoryInterface {
   fun pushPersonalized(bool: Boolean)
   fun pullPersonalized(): Boolean
 
-
   fun pullThemeMode(): Int
   fun pushThemeMode(mode: Int)
 
   fun clearAll()
+  fun pushFcmToken(string: String)
+  fun pullFcmToken(): String?
 }

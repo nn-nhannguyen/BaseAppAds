@@ -132,7 +132,7 @@ class AdmobReward {
           context,
           context.getString(R.string.ads_reward),
           adRequest,
-          it,
+          it
         )
       }
       LogUtil.logMessage("AdMob", "loading reward ad")
@@ -153,7 +153,7 @@ class AdmobReward {
     LogUtil.logMessage("AdMob", "show reward ad")
     if (context is Activity) {
       mRewardAd?.show(
-        context,
+        context
       ) { rewardItem ->
         // Handle the reward.
         val rewardAmount = rewardItem.amount

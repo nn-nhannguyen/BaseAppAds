@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user added CAs while debuggable only -->
+            <certificates src="user" />
+            <certificates src="system" />
+        </trust-anchors>
+    </debug-overrides>
+
+<!--    <domain-config cleartextTrafficPermitted="true">-->
+<!--        &lt;!&ndash; Make sure your URL Server here &ndash;&gt;-->
+<!--        <domain includeSubdomains="true">domain</domain>-->
+<!--        <trust-anchors>-->
+<!--            <certificates src="user" />-->
+<!--            <certificates src="system" />-->
+<!--        </trust-anchors>-->
+<!--    </domain-config>-->
+</network-security-config>

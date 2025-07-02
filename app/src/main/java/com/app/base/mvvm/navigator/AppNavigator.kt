@@ -1,5 +1,6 @@
 package com.app.base.mvvm.navigator
 
+import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.app.base.mvvm.ui.home.HomeActivity
@@ -16,8 +17,8 @@ open class AppNavigator @Inject constructor(fragmentActivity: FragmentActivity) 
     TestActivity.start(activityRef)
   }
 
-  fun navigateToHome() {
-    HomeActivity.start(activityRef)
+  fun navigateToHome(bundle: Bundle? = null) {
+    HomeActivity.start(activityRef, bundle)
   }
 
   fun navigateToTestApi(filePath: String) {

@@ -4,4 +4,5 @@
     <string name="ads_banner_adaptive_id" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
     <string name="ads_full_screen_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
     <string name="ads_reward" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="ads_open_app_id" translatable="false">ca-app-pub-3940256099942544/9257395921</string>
 </resources>

@@ -19,11 +19,7 @@ import com.app.base.mvvm.view.item.AdmobReward
 import com.google.android.gms.ads.admanager.AdManagerAdView
 
 abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
-  abstract fun onInit(
-    view: View,
-    fragmentArg: Bundle?,
-    saveInstance: Bundle?,
-  )
+  abstract fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?)
 
   abstract fun applyBinding(viewDataBinding: ViewDataBinding)
 
@@ -40,20 +36,13 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     }
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?,
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     mDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
     applyBinding(mDataBinding)
     return mDataBinding.root
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?,
-  ) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     mDataBinding.lifecycleOwner = viewLifecycleOwner
     onInit(view, arguments, savedInstanceState)
@@ -74,7 +63,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
           override fun loadFail() {
             onLoadAdBannerListener?.loadAdFailed()
           }
-        },
+        }
       )
       loadAds(requireActivity(), isAdaptive)
       updateAdView(adView)
@@ -105,7 +94,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
           override fun dismissAd() {
             it.dismissAd()
           }
-        },
+        }
       )
     }
     adMobInterstitial.loadAdMobFullScreen(requireActivity(), show, forceLoad)
@@ -131,7 +120,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
           override fun dismissAd() {
             it.dismissAd()
           }
-        },
+        }
       )
     }
     activity?.let {
@@ -169,10 +158,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     mActivity?.updateFlagAllowDismissLoading(allow)
   }
 
-  fun showMessageDialog(
-    message: String,
-    onPositiveButtonListener: () -> Unit,
-  ) {
+  fun showMessageDialog(message: String, onPositiveButtonListener: () -> Unit) {
     mActivity?.showMessageDialog(message, onPositiveButtonListener)
   }
 
@@ -181,7 +167,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     message: Int,
     textNegative: Int,
     textPositive: Int,
-    onPositiveButtonListener: () -> Unit,
+    onPositiveButtonListener: () -> Unit
   ) {
     mActivity?.showFullDialog(title, message, textNegative, textPositive, onPositiveButtonListener)
   }
@@ -192,7 +178,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     textNegative: Int,
     textPositive: Int,
     onNegativeButtonListener: () -> Unit,
-    onPositiveButtonListener: () -> Unit,
+    onPositiveButtonListener: () -> Unit
   ) {
     mActivity?.showDialogCallback(
       title,
@@ -200,7 +186,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
       textNegative,
       textPositive,
       onNegativeButtonListener,
-      onPositiveButtonListener,
+      onPositiveButtonListener
     )
   }
 
@@ -214,7 +200,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     textNegative: Int,
     textPositive: Int,
     onNegativeButtonListener: () -> Unit,
-    onPositiveButtonListener: () -> Unit,
+    onPositiveButtonListener: () -> Unit
   ) {
     mActivity?.showMessageDialog(
       title,

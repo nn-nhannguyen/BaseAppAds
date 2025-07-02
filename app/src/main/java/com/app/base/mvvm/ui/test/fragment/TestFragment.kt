@@ -81,7 +81,7 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
               tvLoading.text = getString(R.string.failed_to_load_ad)
               tvAd.beInvisible()
             }
-          },
+          }
         )
       }
     }, 100)
@@ -100,7 +100,7 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
         override fun dismissAd() {
           showNextScreen()
         }
-      },
+      }
     )
     loadAdMobInterstitial(false)
   }

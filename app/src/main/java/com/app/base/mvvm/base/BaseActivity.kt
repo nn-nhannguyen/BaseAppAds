@@ -60,10 +60,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
 
   abstract fun applyBinding(viewDataBinding: ViewDataBinding)
 
-  abstract fun onInit(
-    arg: Bundle?,
-    saveInstance: Bundle?,
-  )
+  abstract fun onInit(arg: Bundle?, saveInstance: Bundle?)
 
   override fun attachBaseContext(newBase: Context) {
     super.attachBaseContext(FontScaleContextWrapper.wrap(newBase))
@@ -73,7 +70,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     handleSplashScreen()
     super.onCreate(savedInstanceState)
     mDataBinding = DataBindingUtil.setContentView(this, layoutId)
-    //configFullScreen(mDataBinding.root, true)
+    // configFullScreen(mDataBinding.root, true)
     mDataBinding.lifecycleOwner = this
 
 //        val view = findViewById<View>(android.R.id.content).rootView
@@ -95,11 +92,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     }
   }
 
-  private fun configFullScreen(
-    mainContainer: View,
-    isFullScreen: Boolean,
-    showStatusBar: Boolean = true,
-  ) {
+  private fun configFullScreen(mainContainer: View, isFullScreen: Boolean, showStatusBar: Boolean = true) {
     if (!isDarkMode()) {
       window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     } else {
@@ -137,10 +130,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
   }
 
-  private fun hideSystemUI(
-    mainContainer: View,
-    showStatusBar: Boolean = true,
-  ) {
+  private fun hideSystemUI(mainContainer: View, showStatusBar: Boolean = true) {
     if (Build.VERSION.SDK_INT < 30) {
       return
     }
@@ -154,7 +144,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
       controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
       ViewCompat.setOnApplyWindowInsetsListener(
-        mainContainer,
+        mainContainer
       ) { view: View, windowInsets: WindowInsetsCompat ->
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
         view.layoutParams =
@@ -174,7 +164,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     WindowInsetsControllerCompat(window, mainContainer).let { controller ->
       controller.show(WindowInsetsCompat.Type.systemBars())
       ViewCompat.setOnApplyWindowInsetsListener(
-        mainContainer,
+        mainContainer
       ) { view: View, _: WindowInsetsCompat ->
         view.layoutParams =
           (view.layoutParams as FrameLayout.LayoutParams).apply {
@@ -225,15 +215,17 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
             override fun onClick(v: View) {
               onPositiveButtonListener.invoke()
             }
-          },
+          }
         )
         .create()
     alertDialog?.show()
   }
 
   fun showFullDialog(
-    title: Int, message: Int,
-    textNegative: Int, textPositive: Int,
+    title: Int,
+    message: Int,
+    textNegative: Int,
+    textPositive: Int,
     onPositiveButtonListener: () -> Unit
   ) {
     AlertDialog.Builder(this)
@@ -246,14 +238,16 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun onClick(v: View) {
             onPositiveButtonListener.invoke()
           }
-        },
+        }
       )
       .create().show()
   }
 
   fun showDialogCallback(
-    title: Int, message: Int,
-    textNegative: Int, textPositive: Int,
+    title: Int,
+    message: Int,
+    textNegative: Int,
+    textPositive: Int,
     onNegativeButtonListener: () -> Unit,
     onPositiveButtonListener: () -> Unit
   ) {
@@ -266,7 +260,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun onClick(v: View) {
             onNegativeButtonListener.invoke()
           }
-        },
+        }
       )
       .setPositiveButtonText(resId = textPositive, null)
       .setPositiveButtonListener(
@@ -274,14 +268,16 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun onClick(v: View) {
             onPositiveButtonListener.invoke()
           }
-        },
+        }
       )
       .create().show()
   }
 
   fun showMessageDialog(
-    title: String, message: String,
-    textNegative: Int, textPositive: Int,
+    title: String,
+    message: String,
+    textNegative: Int,
+    textPositive: Int,
     onNegativeButtonListener: () -> Unit,
     onPositiveButtonListener: () -> Unit
   ) {
@@ -294,7 +290,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun onClick(v: View) {
             onNegativeButtonListener.invoke()
           }
-        },
+        }
       )
       .setPositiveButtonText(resId = textPositive, null)
       .setPositiveButtonListener(
@@ -302,7 +298,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun onClick(v: View) {
             onPositiveButtonListener.invoke()
           }
-        },
+        }
       )
       .create().show()
   }
@@ -336,12 +332,14 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
       .setTitle(getString(R.string.title_error_network))
       .setCanceledOnTouchOutside(false)
       .setMessage(getString(R.string.error_network))
-      .setPositiveButtonText(getString(R.string.text_ok), object : AlertDialog.OnClickListener {
-        override fun onClick(v: View) {
-          callBack?.invoke()
+      .setPositiveButtonText(
+        getString(R.string.text_ok),
+        object : AlertDialog.OnClickListener {
+          override fun onClick(v: View) {
+            callBack?.invoke()
+          }
         }
-
-      })
+      )
       .create().show()
   }
 
@@ -428,10 +426,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     return false
   }
 
-  fun checkToHideKeyboard(
-    view: View,
-    event: MotionEvent,
-  ) {
+  fun checkToHideKeyboard(view: View, event: MotionEvent) {
     val scrCoordinates = IntArray(2)
     view.getLocationOnScreen(scrCoordinates)
     val x = event.rawX + view.left - scrCoordinates[0]
@@ -480,7 +475,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun loadFail() {
             onLoadAdBannerListener?.loadAdFailed()
           }
-        },
+        }
       )
       loadAds(this@BaseActivity, isAdaptive)
       updateAdView(adView)
@@ -515,7 +510,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun dismissAd() {
             it.dismissAd()
           }
-        },
+        }
       )
     }
     adMobInterstitial.loadAdMobFullScreen(this, show, forceLoad)
@@ -541,7 +536,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
           override fun dismissAd() {
             it.dismissAd()
           }
-        },
+        }
       )
     }
     adMobReward.loadRewardAd(this, show)

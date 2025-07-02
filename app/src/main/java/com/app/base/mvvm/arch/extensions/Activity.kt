@@ -47,7 +47,7 @@ fun Activity.feedBackApp() {
   ShareUtils.sendMail(
     this,
     getString(R.string.text_feedback) +
-        " " + getString(R.string.app_name),
-    getString(R.string.text_feedback),
+      " " + getString(R.string.app_name),
+    getString(R.string.text_feedback)
   )
 }
