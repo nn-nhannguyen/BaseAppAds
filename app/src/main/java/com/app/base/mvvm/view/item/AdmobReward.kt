@@ -2,11 +2,13 @@ package com.app.base.mvvm.view.item
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import com.app.base.mvvm.R
 import com.app.base.mvvm.repository.AppSettingsRepository
 import com.app.base.mvvm.repository.AppSettingsRepositoryInterface
 import com.app.base.mvvm.utils.LogUtil
 import com.app.base.mvvm.utils.NetworkHelper
+import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -15,28 +17,35 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 class AdmobReward {
+
   private var mRewardAd: RewardedAd? = null
   private var onLoadRewardAdListener: OnLoadRewardAdListener? = null
   private var isShowing: Boolean = false
   private var isAllowOpen: Boolean = false
   private var rewardAdLoadCallback: RewardedAdLoadCallback? = null
   private var isLoadingAds = false
-  private lateinit var appSettingsRepository: AppSettingsRepositoryInterface
+  private var appSettingsRepository: AppSettingsRepositoryInterface? = null
 
   fun loadRewardAd(context: Context, showAd: Boolean) {
-    appSettingsRepository = AppSettingsRepository(context)
-//    if (isPremium) {
-//      loadFail()
-//      return
-//    }
+    if (appSettingsRepository == null) {
+      appSettingsRepository = AppSettingsRepository(context)
+    }
+
+    /*if (isRemovedAd or accountPremium) {
+      loadFail()
+      return
+    }*/
+
     if (showAd) {
       isAllowOpen = true
     }
+
     if (mRewardAd != null && !isShowing) {
       LogUtil.logMessage("AdMob", "show reward ad")
       showRewardAd(context)
       return
     }
+
     isAllowOpen = false
 
     if (isLoadingAds) {
@@ -44,10 +53,12 @@ class AdmobReward {
       loadFail()
       return
     }
-    if (!NetworkHelper.isNetworkConnected(context)) {
+
+    if (!NetworkHelper.isNetworkConnected(context) || appSettingsRepository?.pullCanRequestAd() == false) {
       loadFail()
       return
     }
+
     setUpAdLoadCallBack(context)
     loadAds(context)
   }
@@ -103,14 +114,25 @@ class AdmobReward {
 
   private fun loadAds(context: Context) {
     if (mRewardAd == null && NetworkHelper.isNetworkConnected(context) && !isLoadingAds) {
-      val adRequest = AdRequest.Builder().build()
+      val isPersonalized = appSettingsRepository?.pullPersonalized()
+
+      val adRequest = if (isPersonalized == true) {
+        AdRequest.Builder().build()
+      } else {
+        val extras = Bundle().apply {
+          putString("npa", "1")
+        }
+        AdRequest.Builder()
+          .addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
+          .build()
+      }
       isLoadingAds = true
       rewardAdLoadCallback?.let {
         RewardedAd.load(
           context,
           context.getString(R.string.ads_reward),
           adRequest,
-          it
+          it,
         )
       }
       LogUtil.logMessage("AdMob", "loading reward ad")
@@ -131,7 +153,7 @@ class AdmobReward {
     LogUtil.logMessage("AdMob", "show reward ad")
     if (context is Activity) {
       mRewardAd?.show(
-        context
+        context,
       ) { rewardItem ->
         // Handle the reward.
         val rewardAmount = rewardItem.amount

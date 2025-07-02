@@ -7,14 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Customize your theme here. -->
-        <item name="buttonStyle">@style/AllBtn</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="editTextStyle">@style/AllEdt</item>
-        <item name="imageButtonStyle">@style/AllImgBtn</item>
+        <item name="imageButtonStyle">@style/ImageButtonStyle</item>
         <!--apply AppCompat-->
-        <item name="android:buttonStyle">@style/AllBtn</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="android:editTextStyle">@style/AllEdt</item>
         <item name="android:textViewStyle">@style/AllTextView</item>
-        <item name="android:imageButtonStyle">@style/AllImgBtn</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
 
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
@@ -31,14 +31,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Customize your theme here. -->
-        <item name="buttonStyle">@style/AllBtn</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="editTextStyle">@style/AllEdt</item>
-        <item name="imageButtonStyle">@style/AllImgBtn</item>
+        <item name="imageButtonStyle">@style/ImageButtonStyle</item>
         <!--apply AppCompat-->
-        <item name="android:buttonStyle">@style/AllBtn</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="android:editTextStyle">@style/AllEdt</item>
         <item name="android:textViewStyle">@style/AllTextView</item>
-        <item name="android:imageButtonStyle">@style/AllImgBtn</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
@@ -53,7 +53,7 @@
 
     <!--View component-->styles.xml
 
-    <style name="AllImgBtn" parent="android:Widget.ImageButton">
+    <style name="ImageButtonStyle" parent="android:Widget.ImageButton">
         <item name="android:padding">@dimen/vertical_padding</item>
         <item name="android:background">@drawable/bg_all_img_btn</item>
     </style>
@@ -79,7 +79,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="AllBtn" parent="android:style/Widget.Button">
+    <style name="ButtonStyle" parent="android:style/Widget.Button">
         <item name="android:background">@drawable/bg_all_btn</item>
         <item name="android:paddingTop">@dimen/vertical_padding</item>
         <item name="android:paddingBottom">@dimen/vertical_padding</item>
@@ -153,4 +153,33 @@
         <item name="android:background">@drawable/bg_text_ad</item>
     </style>
 
+    <style name="FullScreenStatusBarColor">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/color_dialog_transparent</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.App.Launcher" parent="SplashTheme">
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
+    <style name="CustomDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color_text</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_shape_rounded_dialog</item>
+    </style>
 </resources>

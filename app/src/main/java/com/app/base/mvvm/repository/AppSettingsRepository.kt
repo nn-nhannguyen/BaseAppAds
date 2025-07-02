@@ -12,7 +12,9 @@ class AppSettingsRepository constructor(private val context: Context) :
   @Keep
   enum class Key {
     ACCESS_TOKEN,
-    THEME_MODE
+    THEME_MODE,
+    CAN_REQUEST_AD,
+    PERSONALIZED,
   }
 
   private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
@@ -91,6 +93,22 @@ class AppSettingsRepository constructor(private val context: Context) :
 
   override fun pushThemeMode(mode: Int) {
     saveInt(Key.THEME_MODE, mode)
+  }
+
+  override fun pushCanRequestAd(value: Boolean) {
+    saveBoolean(Key.CAN_REQUEST_AD, value)
+  }
+
+  override fun pullCanRequestAd(): Boolean {
+    return loadBoolean(Key.CAN_REQUEST_AD, true)
+  }
+
+  override fun pushPersonalized(value: Boolean) {
+    saveBoolean(Key.PERSONALIZED, true)
+  }
+
+  override fun pullPersonalized(): Boolean {
+    return loadBoolean(Key.PERSONALIZED, true)
   }
 
   override fun clearAll() {

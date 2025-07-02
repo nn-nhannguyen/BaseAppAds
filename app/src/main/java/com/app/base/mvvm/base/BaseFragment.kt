@@ -19,13 +19,16 @@ import com.app.base.mvvm.view.item.AdmobReward
 import com.google.android.gms.ads.admanager.AdManagerAdView
 
 abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
+  abstract fun onInit(
+    view: View,
+    fragmentArg: Bundle?,
+    saveInstance: Bundle?,
+  )
 
-  abstract fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?)
   abstract fun applyBinding(viewDataBinding: ViewDataBinding)
 
   private var mActivity: BaseActivity? = null
   private lateinit var mDataBinding: ViewDataBinding
-
   private var adView: AdManagerAdView? = null
   private var onLoadAdInterstitialListener: OnLoadAdInterstitialListener? = null
   private var onLoadRewardAdListener: OnLoadRewardAdListener? = null
@@ -37,16 +40,103 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     }
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?,
+  ): View? {
     mDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
     applyBinding(mDataBinding)
     return mDataBinding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
     mDataBinding.lifecycleOwner = viewLifecycleOwner
     onInit(view, arguments, savedInstanceState)
+  }
+
+  fun loadAdBanner(
+    adModBannerItem: AdModBannerItem,
+    onLoadAdBannerListener: OnLoadAdBannerItemListener? = null,
+    isAdaptive: Boolean? = false
+  ) {
+    adModBannerItem.apply {
+      setAdListener(
+        object : AdModBannerItem.OnLoadListener {
+          override fun loaded() {
+            onLoadAdBannerListener?.loaded()
+          }
+
+          override fun loadFail() {
+            onLoadAdBannerListener?.loadAdFailed()
+          }
+        },
+      )
+      loadAds(requireActivity(), isAdaptive)
+      updateAdView(adView)
+    }
+  }
+
+  fun setOnLoadAdInterstitialListener(listener: OnLoadAdInterstitialListener? = null) {
+    onLoadAdInterstitialListener = listener
+  }
+
+  fun setOnLoadRewardAdListener(listener: OnLoadRewardAdListener? = null) {
+    onLoadRewardAdListener = listener
+  }
+
+  fun loadAdMobInterstitial(show: Boolean, forceLoad: Boolean? = false) {
+    val adMobInterstitial = AdMobInterstitial.instance
+    onLoadAdInterstitialListener?.let {
+      adMobInterstitial.setOnLoadAdFullScreenListener(
+        object : AdMobInterstitial.OnLoadAdInterstitialListener {
+          override fun loaded() {
+            it.loaded()
+          }
+
+          override fun loadFail() {
+            it.loadFailed()
+          }
+
+          override fun dismissAd() {
+            it.dismissAd()
+          }
+        },
+      )
+    }
+    adMobInterstitial.loadAdMobFullScreen(requireActivity(), show, forceLoad)
+  }
+
+  fun loadRewardAd(show: Boolean) {
+    val adMobReward = AdmobReward.instance
+    onLoadRewardAdListener?.let {
+      adMobReward.setOnLoadRewardAdListener(
+        object : AdmobReward.OnLoadRewardAdListener {
+          override fun loaded() {
+            it.loaded()
+          }
+
+          override fun loadFail() {
+            it.loadFailed()
+          }
+
+          override fun onEarnedReward() {
+            it.onEarnedReward()
+          }
+
+          override fun dismissAd() {
+            it.dismissAd()
+          }
+        },
+      )
+    }
+    activity?.let {
+      adMobReward.loadRewardAd(it, show)
+    }
   }
 
   fun listenerLoading(viewModel: BaseViewModel) {
@@ -75,12 +165,65 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     mActivity?.dismissLoading()
   }
 
-  fun showMessageDialog(message: String) {
-    mActivity?.showMessageDialog(message)
+  fun allowAutoDismissLoading(allow: Boolean = true) {
+    mActivity?.updateFlagAllowDismissLoading(allow)
+  }
+
+  fun showMessageDialog(
+    message: String,
+    onPositiveButtonListener: () -> Unit,
+  ) {
+    mActivity?.showMessageDialog(message, onPositiveButtonListener)
+  }
+
+  fun showFullDialog(
+    title: Int,
+    message: Int,
+    textNegative: Int,
+    textPositive: Int,
+    onPositiveButtonListener: () -> Unit,
+  ) {
+    mActivity?.showFullDialog(title, message, textNegative, textPositive, onPositiveButtonListener)
+  }
+
+  fun showDialogCallback(
+    title: Int,
+    message: Int,
+    textNegative: Int,
+    textPositive: Int,
+    onNegativeButtonListener: () -> Unit,
+    onPositiveButtonListener: () -> Unit,
+  ) {
+    mActivity?.showDialogCallback(
+      title,
+      message,
+      textNegative,
+      textPositive,
+      onNegativeButtonListener,
+      onPositiveButtonListener,
+    )
   }
 
   fun showMessageDialog(builder: AlertDialog.Builder) {
     mActivity?.showMessageDialog(builder)
+  }
+
+  fun showMessageDialog(
+    title: String,
+    message: String,
+    textNegative: Int,
+    textPositive: Int,
+    onNegativeButtonListener: () -> Unit,
+    onPositiveButtonListener: () -> Unit,
+  ) {
+    mActivity?.showMessageDialog(
+      title,
+      message,
+      textNegative,
+      textPositive,
+      onNegativeButtonListener,
+      onPositiveButtonListener
+    )
   }
 
   fun showSnackMessage(message: String) {
@@ -111,8 +254,8 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
     mActivity?.gotoPermissionSettings()
   }
 
-  fun showErrorNetWork() {
-    mActivity?.showErrorNetWork()
+  fun showErrorNetWork(callBack: (() -> Unit)? = null) {
+    mActivity?.showErrorNetWork(callBack)
   }
 
   fun finishedActivity() {
@@ -152,82 +295,6 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
   override fun onDestroy() {
     super.onDestroy()
     adView?.destroy()
-  }
-
-  fun loadAdBanner(adModBannerItem: AdModBannerItem, onLoadAdBannerListener: OnLoadAdBannerItemListener? = null) {
-    adModBannerItem.apply {
-      setAdListener(
-        object : AdModBannerItem.OnLoadListener {
-          override fun loaded() {
-            onLoadAdBannerListener?.loaded()
-          }
-
-          override fun loadFail() {
-            onLoadAdBannerListener?.loadAdFailed()
-          }
-        }
-      )
-      loadAds(requireActivity())
-      updateAdView(adView)
-    }
-  }
-
-  fun setOnLoadAdInterstitialListener(listener: OnLoadAdInterstitialListener? = null) {
-    onLoadAdInterstitialListener = listener
-  }
-
-  fun setOnLoadRewardListener(listener: OnLoadRewardAdListener? = null) {
-    onLoadRewardAdListener = listener
-  }
-
-  fun loadAdMobInterstitial(show: Boolean) {
-    val adMobInterstitial = AdMobInterstitial.instance
-    onLoadAdInterstitialListener?.let {
-      adMobInterstitial.setOnLoadAdFullScreenListener(
-        object : AdMobInterstitial.OnLoadAdInterstitialListener {
-          override fun loaded() {
-            it.loaded()
-          }
-
-          override fun loadFail() {
-            it.loadFailed()
-          }
-
-          override fun dismissAd() {
-            it.dismissAd()
-          }
-        }
-      )
-    }
-    adMobInterstitial.loadAdMobFullScreen(requireActivity(), show)
-  }
-
-  fun loadRewardAd(show: Boolean) {
-    val adMobReward = AdmobReward.instance
-    onLoadRewardAdListener?.let {
-      adMobReward.setOnLoadRewardAdListener(
-        object : AdmobReward.OnLoadRewardAdListener {
-          override fun loaded() {
-            it.loaded()
-          }
-
-          override fun loadFail() {
-            it.loadFailed()
-          }
-
-          override fun onEarnedReward() {
-            it.onEarnedReward()
-          }
-
-          override fun dismissAd() {
-            it.dismissAd()
-          }
-        }
-      )
-    }
-    activity?.let {
-      adMobReward.loadRewardAd(it, show)
-    }
   }
 
   interface LoadAdBannerItemListener {

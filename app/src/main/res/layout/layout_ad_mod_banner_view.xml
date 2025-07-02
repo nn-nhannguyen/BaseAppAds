@@ -6,19 +6,24 @@
     android:minHeight="50dp"
     android:padding="1dp">
 
-    <TextView style="@style/TextAdStyle" />
+    <TextView
+        android:id="@+id/tvAd"
+        style="@style/TextAdStyle" />
 
     <TextView
+        android:id="@+id/tvLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/loading_ad"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textColor="@color/color_text"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <com.app.base.mvvm.view.item.AdModBannerItem
         android:id="@+id/adModBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top" />
+        android:layout_gravity="top"
+        android:gravity="center_horizontal" />
 </FrameLayout>

@@ -1,24 +1,52 @@
 <resources>
     <string name="app_name">BaseAds</string>
-    <string name="error_network">Error Network</string>
+
+    <!--Popup-->
     <string name="title">Title</string>
     <string name="ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_ok">OK</string>
+
+    <!--Ads-->
+    <string name="loading_ad">Loading ad…</string>
+    <string name="text_ad">Ad</string>
+    <string name="ad_not_available">Ad is not available at the moment. Please try again later, or check your internet connection.</string>
+    <string name="loading_wait_moment">Ad will be shown shortly… \nThank you for waiting.</string>
+    <string name="failed_to_load_ad">Failed to load ad</string>
+    <string name="to_continue">To continue</string>
+    <string name="condition_to_continue">To be able to continue, you need to watch a short video.\n\nEvery time you want to continue, you will need to watch the video again.</string>
+    <string name="watch_video_to_use">Watch Video to Continue</string>
+
+    <!--    Appearance-->
+    <string name="theme">Theme</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="system">System</string>
+
+    <!--    Error-->
+    <string name="title_error_network">Network Error</string>
+    <string name="error_network">Please check your internet connection.\n Some features require an internet connection to work properly.</string>
+    <string name="error_please_try_again_later">Error, please try again later!</string>
+    <string name="message_session_expired">Session expired \nPlease login again!</string>
+    <string name="msg_no_internet_exception">Can\'t connect. Please connect network!</string>
+    <string name="msg_request_time_out_exception">Can\'t connect. Please try again!</string>
+    <string name="msg_unknown_exception">Unknown exception</string>
+
+    <!--    Permission-->
     <string name="please_turn_on_permission_camera">Please allow permission camera!</string>
     <string name="please_turn_on_permission_storage">Please allow permission storage!</string>
     <string name="please_turn_on_permission_notification">Please allow permission show notification!</string>
-    <string name="text_cancel">Cancel</string>
-    <string name="text_ok">OK</string>
     <string name="message_how_to_turn_on_permission">Turn on permission on menu  \'Permissions\'</string>
+
+    <!--    Share action-->
     <string name="text_share_with_app">Share with app</string>
     <string name="text_request_login">Please login to continue</string>
-    <string name="text_please_feedback">Please Feedback</string>
+    <string name="text_please_feedback">We want to hear your feedback to make the app better</string>
     <string name="text_feedback">Feedback</string>
     <string name="share_by_email">Feedback</string>
     <string name="can_not_send_email">Can\'t send email</string>
-    <string name="msg_no_internet_exception">No internet connect！</string>
-    <string name="msg_request_time_out_exception">Time out！</string>
-    <string name="message_session_expired">Session expired, please login again</string>
-    <string name="msg_unknown_exception">Unknown exception</string>
-    <string name="loading_ad">Loading ad…</string>
-    <string name="text_ad">Ad</string>
+    <string name="share">Share</string>
+    <string name="preparing_your_video_preview_just_a_moment">Preparing your video preview.\nJust a moment…</string>
+    <string name="map_no_connection">The map is unavailable, is currently loading, or there is no internet connection.</string>
+
 </resources>

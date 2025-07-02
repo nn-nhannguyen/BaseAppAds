@@ -207,4 +207,5 @@ dependencies {
   implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
   implementation("com.google.firebase:firebase-analytics-ktx")
   implementation 'com.google.android.gms:play-services-ads:23.2.0'
+  implementation "androidx.core:core-splashscreen:1.0.1"
 }

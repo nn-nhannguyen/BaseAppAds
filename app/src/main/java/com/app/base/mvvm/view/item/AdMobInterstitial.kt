@@ -2,11 +2,17 @@ package com.app.base.mvvm.view.item
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import com.app.base.mvvm.R
 import com.app.base.mvvm.repository.AppSettingsRepository
 import com.app.base.mvvm.repository.AppSettingsRepositoryInterface
+import com.app.base.mvvm.utils.ConstantUtil
 import com.app.base.mvvm.utils.LogUtil
 import com.app.base.mvvm.utils.NetworkHelper
+import com.app.base.mvvm.view.dialog.LoadingAdsDialog
+import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -15,25 +21,40 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class AdMobInterstitial {
+
   private var mInterstitialAd: InterstitialAd? = null
   private var onLoadAdInterstitialListener: OnLoadAdInterstitialListener? = null
-  private var isShowing: Boolean = false
-  private var isAllowOpen: Boolean = false
+  private var isShowing = false
+  private var isAllowOpen = false
   private var interstitialAdLoadCallback: InterstitialAdLoadCallback? = null
   private var isLoadingAds = false
-  private lateinit var appSettingsRepository: AppSettingsRepositoryInterface
+  private var appSettingsRepository: AppSettingsRepositoryInterface? = null
+  private var mLoadingAdsDialog: LoadingAdsDialog? = null
+  private var mTimeLoad = 0L
+  var forceLoad = false
 
-  fun loadAdMobFullScreen(context: Context, showAd: Boolean) {
-    appSettingsRepository = AppSettingsRepository(context)
-    // if account is premium  ->loadFail()
+  fun loadAdMobFullScreen(context: Context, showAd: Boolean, isForceLoad: Boolean? = false) {
+    forceLoad = isForceLoad == true
+
+    if (appSettingsRepository == null) {
+      appSettingsRepository = AppSettingsRepository(context)
+    }
+
+//    if (isRemovedAd or accountPremium) {
+//      loadFail()
+//      return
+//    }
+
     if (showAd) {
       isAllowOpen = true
     }
+
     if (mInterstitialAd != null && !isShowing) {
       LogUtil.logMessage("AdMob", "show ad fullscreen")
       showInterstitial(context)
       return
     }
+
     isAllowOpen = false
 
     if (isLoadingAds) {
@@ -41,10 +62,12 @@ class AdMobInterstitial {
       loadFail()
       return
     }
-    if (!NetworkHelper.isNetworkConnected(context)) {
+
+    if (!NetworkHelper.isNetworkConnected(context) || appSettingsRepository?.pullCanRequestAd() == false) {
       loadFail()
       return
     }
+
     setUpAdLoadCallBack(context)
     loadAds(context)
   }
@@ -100,14 +123,27 @@ class AdMobInterstitial {
 
   private fun loadAds(context: Context) {
     if (mInterstitialAd == null && NetworkHelper.isNetworkConnected(context) && !isLoadingAds) {
-      val adRequest = AdRequest.Builder().build()
+
+      val isPersonalized = appSettingsRepository?.pullPersonalized()
+
+      val adRequest = if (isPersonalized == true) {
+        AdRequest.Builder().build()
+      } else {
+        val extras = Bundle().apply {
+          putString("npa", "1")
+        }
+        AdRequest.Builder()
+          .addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
+          .build()
+      }
+
       isLoadingAds = true
       interstitialAdLoadCallback?.let {
         InterstitialAd.load(
           context,
           context.getString(R.string.ads_full_screen_id),
           adRequest,
-          it
+          it,
         )
       }
       LogUtil.logMessage("AdMob", "loading ad fullscreen")
@@ -117,7 +153,14 @@ class AdMobInterstitial {
   }
 
   private fun showInterstitial(context: Context) {
-    if (mInterstitialAd != null && !isShowing && isAllowOpen) {
+    val currentTime = System.currentTimeMillis()
+    val deltaTime: Long = currentTime - mTimeLoad
+
+    if (mInterstitialAd != null && !isShowing && isAllowOpen &&
+      (deltaTime > ConstantUtil.AdConstant.TIME_SHOW_ADMOB_FULLSCREEN || forceLoad)
+    ) {
+      forceLoad = false
+      mTimeLoad = currentTime
       showDialogAds(context)
     } else {
       loadFail()
@@ -125,14 +168,29 @@ class AdMobInterstitial {
   }
 
   private fun showDialogAds(context: Context) {
-    LogUtil.logMessage("AdMob", "show ad fullscreen")
-    if (context is Activity) {
-      mInterstitialAd?.show(context)
-    } else {
-      isShowing = true
+    mLoadingAdsDialog = LoadingAdsDialog(
+      context,
+      object : LoadingAdsDialog.OnDialogPlayListener {
+        override fun onDismiss() {
+        }
+      }).apply {
+      show()
     }
-    isAllowOpen = false
+
+    Handler(Looper.getMainLooper()).postDelayed({
+      mLoadingAdsDialog?.dismiss()
+      LogUtil.logMessage("AdMob", "show ad fullscreen")
+
+      if (context is Activity) {
+        mInterstitialAd?.show(context)
+      } else {
+        isShowing = true
+      }
+
+      isAllowOpen = false
+    }, 1000)
   }
+
 
   private fun loadFail() {
     onLoadAdInterstitialListener?.loadFail()

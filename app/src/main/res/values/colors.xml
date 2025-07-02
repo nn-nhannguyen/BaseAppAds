@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#DDDDD0</color>
+    <color name="colorPrimary">@android:color/holo_red_light</color>
     <color name="colorPrimaryDark">#DDDDD0</color>
     <color name="colorAccent">#DDDDD0</color>
     <color name="colorAccent80">#DDDDD0</color>
+
+    <color name="color_background">#f3f3f3</color>
+    <color name="color_option">@color/white</color>
+    <color name="color_dialog">@color/white</color>
+
+    <color name="color_text">#000000</color>
+    <color name="color_text_invert">#FFFFFF</color>
+    <color name="color_text_second">#7D848D</color>
+    <color name="color_button_disable">#999999</color>
+
+    <color name="color_dialog_transparent">#99000000</color>
 
     <color name="colorPressBlackV21">#33000000</color>
     <color name="colorIdleMask">@android:color/transparent</color>
@@ -20,7 +31,6 @@
     <color name="textDisable">#818181</color>
     <color name="textHint">#e4e4e4</color>
     <color name="text_black">@android:color/black</color>
-    <color name="color_text">#000000</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="buttonStyle">@style/ButtonStyle</item>-->
+        <item name="imageButtonStyle">@style/ImageButtonStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
+        <item name="android:statusBarColor">@color/color_background</item>
+        <item name="android:windowBackground">@color/color_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/quicksand_medium</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.App.Launcher" parent="SplashTheme">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/icon_splash</item>
+        <item name="android:windowSplashScreenAnimationDuration">2500</item>
+        <item name="android:windowSplashScreenBackground">@color/color_background</item>
+        <!--        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">-->
+        <!--            @drawable/ic_brand_app_name-->
+        <!--        </item>-->
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
+</resources>

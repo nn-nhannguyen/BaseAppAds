@@ -8,16 +8,19 @@ import android.view.ViewTreeObserver
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import com.app.base.mvvm.R
+import com.app.base.mvvm.arch.extensions.beInvisible
 import com.app.base.mvvm.arch.extensions.beVisible
 import com.app.base.mvvm.arch.extensions.setOnSingleClickListener
+import com.app.base.mvvm.base.BaseActivity
 import com.app.base.mvvm.base.BaseFragment
 import com.app.base.mvvm.databinding.FragmentHomeBinding
 import com.app.base.mvvm.model.AdOpenScreenAction
 import com.app.base.mvvm.ui.home.navigator.HomeNavigator
 import com.app.base.mvvm.ui.home.viewmodel.HomeFragmentViewModel
 import com.app.base.mvvm.utils.AppUtil
+import com.app.base.mvvm.utils.ConstantUtil
 import com.app.base.mvvm.utils.LogUtil
-import com.app.base.mvvm.utils.NetworkHelper
+import com.app.base.mvvm.view.dialog.RequestViewAdDialog
 import com.google.android.gms.ads.AdSize
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -42,25 +45,64 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
   override fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?) {
     setupClick()
     initAdmobBanner()
-    initAndLoadRewardAd() // or initAndLoadAdMobInterstitial
+    initAndLoadRewardAd()
+    initAndLoadAdMobInterstitial()
   }
 
   private fun setupClick() {
     viewBinding.btnTestData.setOnSingleClickListener {
-      currentAdAction = AdOpenScreenAction.OPEN_TEST
-      loadRewardAd(true)
+      currentAdAction = AdOpenScreenAction.REWARD_CONTINUE
+      showDialogViewAdReward()
     }
   }
 
+  private fun showDialogViewAdReward() {
+    val dialog = RequestViewAdDialog()
+    dialog.setOnMusicListener(
+      object : RequestViewAdDialog.RequestViewAdListener {
+        override fun watchAd() {
+          currentAdAction = AdOpenScreenAction.REWARD_CONTINUE
+          if (activity is BaseActivity) {
+            (activity as BaseActivity).loadRewardAd(true)
+          }
+        }
+      },
+    )
+    dialog.show(childFragmentManager, RequestViewAdDialog::class.java.name)
+  }
+
   private fun loadAdMobBanner() {
+    if (!ConstantUtil.AdConstant.ALLOW_SHOW_ADMOB_BANNER) {
+      return
+    }
+
 //    if (isPremiumAccount()) {
 //      return
 //    }
+
     Handler(Looper.getMainLooper()).postDelayed({
-      loadAdBanner(
-        viewBinding.bannerView.adModBanner,
-        object : OnLoadAdBannerItemListener() {}
-      )
+      viewBinding.bannerView.apply {
+        tvLoading.beVisible()
+        tvLoading.text = getString(R.string.loading_ad)
+        tvAd.beVisible()
+        loadAdBanner(
+          adModBanner,
+          object : OnLoadAdBannerItemListener() {
+
+            override fun loaded() {
+              tvLoading.beInvisible()
+              tvAd.beInvisible()
+            }
+
+            override fun loadAdFailed() {
+              tvLoading.beVisible()
+              tvLoading.text = getString(R.string.failed_to_load_ad)
+              tvAd.beInvisible()
+            }
+          },
+          isAdaptive = true
+        )
+      }
     }, 100)
   }
 
@@ -100,7 +142,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         override fun loadFailed() {
-          showNextScreen()
+          if (currentAdAction == AdOpenScreenAction.REWARD_CONTINUE) {
+            currentAdAction = AdOpenScreenAction.DEFAULT
+            (activity as BaseActivity).showMessageDialog(getString(R.string.ad_not_available), {
+              // or continue without ad
+            }, true)
+          } else {
+            showNextScreen()
+          }
         }
 
         override fun dismissAd() {
@@ -112,15 +161,18 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
   }
 
   private fun initAndLoadRewardAd() {
-    setOnLoadRewardListener(
+    setOnLoadRewardAdListener(
       object : OnLoadRewardAdListener() {
         override fun loaded() {
         }
 
         override fun loadFailed() {
           context?.let {
-            if (NetworkHelper.isNetworkConnected(it)) {
-              showNextScreen()
+
+            if (currentAdAction != AdOpenScreenAction.DEFAULT) {
+//              currentAdAction = AdOpenScreenAction.DEFAULT
+//              (activity as BaseActivity).showMessageDialog(getString(R.string.ad_not_available), {}, true)
+              (activity as BaseActivity).loadAdMobInterstitial(true, true)
             }
           }
         }
@@ -143,7 +195,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
   private fun showNextScreen() {
     when (currentAdAction) {
       AdOpenScreenAction.DEFAULT -> return
-      AdOpenScreenAction.OPEN_TEST -> {
+      AdOpenScreenAction.REWARD_CONTINUE -> {
         navigator.openTestData()
       }
     }
