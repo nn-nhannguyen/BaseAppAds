@@ -15,8 +15,13 @@ jobs:
       image: ghcr.io/cirruslabs/android-sdk:35
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Mark repo as safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Setup Ruby
         run: |
