@@ -20,7 +20,7 @@
         android:textSize="12sp"
         android:textStyle="bold" />
 
-    <com.app.base.mvvm.view.item.AdModBannerItem
+    <com.app.base.mvvm.view.item.AdMobBannerItem
         android:id="@+id/adModBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

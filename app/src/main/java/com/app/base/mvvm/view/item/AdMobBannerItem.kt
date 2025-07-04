@@ -16,7 +16,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdView
 
-class AdModBannerItem @JvmOverloads constructor(
+class AdMobBannerItem @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -110,7 +110,7 @@ class AdModBannerItem @JvmOverloads constructor(
     this.adSize = adSize
   }
 
-  fun setAdListener(onLoadListener: OnLoadListener): AdModBannerItem {
+  fun setAdListener(onLoadListener: OnLoadListener): AdMobBannerItem {
     this.onLoadListener = onLoadListener
     return this
   }

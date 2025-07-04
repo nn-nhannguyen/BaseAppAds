@@ -33,7 +33,7 @@ import com.app.base.mvvm.view.dialog.BaseDialogFragment
 import com.app.base.mvvm.view.dialog.LoadingDialog
 import com.app.base.mvvm.view.dialog.SnackBuilder
 import com.app.base.mvvm.view.item.AdMobInterstitial
-import com.app.base.mvvm.view.item.AdModBannerItem
+import com.app.base.mvvm.view.item.AdMobBannerItem
 import com.app.base.mvvm.view.item.AdmobReward
 import com.google.android.gms.ads.AdView
 import com.google.android.material.snackbar.Snackbar
@@ -461,13 +461,13 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
   }
 
   fun loadAdBanner(
-    adModBannerItem: AdModBannerItem,
+    adMobBannerItem: AdMobBannerItem,
     onLoadAdBannerListener: BaseFragment.OnLoadAdBannerItemListener? = null,
     isAdaptive: Boolean? = false
   ) {
-    adModBannerItem.apply {
+    adMobBannerItem.apply {
       setAdListener(
-        object : AdModBannerItem.OnLoadListener {
+        object : AdMobBannerItem.OnLoadListener {
           override fun loaded() {
             onLoadAdBannerListener?.loaded()
           }

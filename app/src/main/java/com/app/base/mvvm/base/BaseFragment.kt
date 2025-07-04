@@ -14,7 +14,7 @@ import com.app.base.mvvm.view.dialog.AlertDialog
 import com.app.base.mvvm.view.dialog.BaseDialogFragment
 import com.app.base.mvvm.view.dialog.SnackBuilder
 import com.app.base.mvvm.view.item.AdMobInterstitial
-import com.app.base.mvvm.view.item.AdModBannerItem
+import com.app.base.mvvm.view.item.AdMobBannerItem
 import com.app.base.mvvm.view.item.AdmobReward
 import com.google.android.gms.ads.admanager.AdManagerAdView
 
@@ -49,13 +49,13 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int) : Fragment(layoutId) {
   }
 
   fun loadAdBanner(
-    adModBannerItem: AdModBannerItem,
+    adMobBannerItem: AdMobBannerItem,
     onLoadAdBannerListener: OnLoadAdBannerItemListener? = null,
     isAdaptive: Boolean? = false
   ) {
-    adModBannerItem.apply {
+    adMobBannerItem.apply {
       setAdListener(
-        object : AdModBannerItem.OnLoadListener {
+        object : AdMobBannerItem.OnLoadListener {
           override fun loaded() {
             onLoadAdBannerListener?.loaded()
           }
