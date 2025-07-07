@@ -37,6 +37,7 @@ class SplashAppActivity : BaseActivity(R.layout.activity_splash) {
 
   @Inject
   lateinit var navigator: SplashNavigator
+  private var waitSplashScreen = true
 
   override fun onStart() {
     super.onStart()
@@ -59,7 +60,7 @@ class SplashAppActivity : BaseActivity(R.layout.activity_splash) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
-          false
+          waitSplashScreen
         }
         checkSetUpAds(bundle)
         // openHome(bundle)
@@ -75,6 +76,7 @@ class SplashAppActivity : BaseActivity(R.layout.activity_splash) {
 
   private fun openHome(bundle: Bundle?) {
     Handler(Looper.getMainLooper()).postDelayed({
+      waitSplashScreen = false
       openNextScreen(bundle)
     }, 2500)
   }
@@ -128,7 +130,7 @@ class SplashAppActivity : BaseActivity(R.layout.activity_splash) {
       val canRequest = googleMobileAdsConsentManager?.canRequestAds == true
       val isPersonalized =
         googleMobileAdsConsentManager?.consentInformation?.consentStatus ==
-          ConsentInformation.ConsentStatus.OBTAINED
+            ConsentInformation.ConsentStatus.OBTAINED
 
       appSettingsRepository.pushCanRequestAd(canRequest)
       appSettingsRepository.pushPersonalized(isPersonalized)

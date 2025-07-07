@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Customize your theme here. -->
+        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="editTextStyle">@style/AllEdt</item>
+        <item name="imageButtonStyle">@style/ImageButtonStyle</item>
+        <!--apply AppCompat-->
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:editTextStyle">@style/AllEdt</item>
+        <item name="android:textViewStyle">@style/AllTextView</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
+
+        <item name="android:statusBarColor">@color/color_background</item>
+        <item name="android:windowBackground">@color/color_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+</resources>
