@@ -38,7 +38,11 @@ class TestActivity : BaseActivity(R.layout.activity_test) {
 
   override fun onInit(arg: Bundle?, saveInstance: Bundle?) {
     navigator.setGraph()
-    // listenerOnBackPress()
+    listenerOnBackPress()
+  }
+
+  override fun connectedNetwork() {
+    testViewModel.updateNetworkStatus(true)
   }
 
   private fun listenerOnBackPress() {

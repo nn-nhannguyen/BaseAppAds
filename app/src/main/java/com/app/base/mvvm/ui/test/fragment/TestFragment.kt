@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.app.base.mvvm.R
 import com.app.base.mvvm.arch.extensions.beGone
@@ -16,7 +17,9 @@ import com.app.base.mvvm.databinding.FragmentTestBinding
 import com.app.base.mvvm.model.AdOpenScreenAction
 import com.app.base.mvvm.ui.test.navigator.TestNavigator
 import com.app.base.mvvm.ui.test.viewmodel.TestFragmentViewModel
+import com.app.base.mvvm.ui.test.viewmodel.TestViewModel
 import com.app.base.mvvm.utils.ConstantUtil
+import com.app.base.mvvm.utils.NetworkHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,10 +29,12 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
   @Inject
   lateinit var navigator: TestNavigator
   private val viewModel by viewModels<TestFragmentViewModel>()
+  private val testViewModel by activityViewModels<TestViewModel>()
 
   private lateinit var viewBinding: FragmentTestBinding
 
   private var currentAdAction = AdOpenScreenAction.DEFAULT
+  private var mIsStartLoadAd = false
 
   override fun applyBinding(viewDataBinding: ViewDataBinding) {
     viewBinding = viewDataBinding as FragmentTestBinding
@@ -37,9 +42,9 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
   }
 
   override fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?) {
-    initAdmobBanner()
-    initAndLoadAdMobInterstitial()
-    setupClick()
+    loadAds()
+    setUpClick()
+    setUpListener()
   }
 
   private fun initAdmobBanner() {
@@ -114,7 +119,7 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
     currentAdAction = AdOpenScreenAction.DEFAULT
   }
 
-  private fun setupClick() {
+  private fun setUpClick() {
     viewBinding.btnTestGetApi.setOnSingleClickListener {
       currentAdAction = AdOpenScreenAction.OPEN_TEST_API
       loadAdMobInterstitial(true)
@@ -123,6 +128,26 @@ class TestFragment : BaseFragment(R.layout.fragment_test) {
     viewBinding.btnTestDataRoom.setOnSingleClickListener {
       currentAdAction = AdOpenScreenAction.OPEN_TEST_DATA_ROOM
       loadAdMobInterstitial(true)
+    }
+  }
+
+  private fun setUpListener() {
+    testViewModel.networkStatus.observe(viewLifecycleOwner) {
+      loadAds()
+    }
+  }
+
+  private fun loadAds() {
+    activity?.let {
+      if (!NetworkHelper.isNetworkConnected(it) || mIsStartLoadAd) {
+        if (!ConstantUtil.AdConstant.ALLOW_SHOW_ADMOB_BANNER) {
+          viewBinding.layoutAd.visibility = View.GONE
+        }
+        return
+      }
+      mIsStartLoadAd = true
+      initAdmobBanner()
+      initAndLoadAdMobInterstitial()
     }
   }
 }

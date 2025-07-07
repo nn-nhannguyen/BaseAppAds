@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.app.base.mvvm.R
 import com.app.base.mvvm.arch.extensions.beInvisible
@@ -17,9 +18,11 @@ import com.app.base.mvvm.databinding.FragmentHomeBinding
 import com.app.base.mvvm.model.AdOpenScreenAction
 import com.app.base.mvvm.ui.home.navigator.HomeNavigator
 import com.app.base.mvvm.ui.home.viewmodel.HomeFragmentViewModel
+import com.app.base.mvvm.ui.home.viewmodel.HomeViewModel
 import com.app.base.mvvm.utils.AppUtil
 import com.app.base.mvvm.utils.ConstantUtil
 import com.app.base.mvvm.utils.LogUtil
+import com.app.base.mvvm.utils.NetworkHelper
 import com.app.base.mvvm.view.dialog.RequestViewAdDialog
 import com.google.android.gms.ads.AdSize
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +34,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
   @Inject
   lateinit var navigator: HomeNavigator
   private val viewModel by viewModels<HomeFragmentViewModel>()
+  private val homeViewModel by activityViewModels<HomeViewModel>()
 
   private lateinit var viewBinding: FragmentHomeBinding
   private var currentAdAction = AdOpenScreenAction.DEFAULT
   private var isEarnedReward = false
   private var bannerAdGlobalListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+  private var mIsStartLoadAd = false
 
   override fun applyBinding(viewDataBinding: ViewDataBinding) {
     viewBinding = viewDataBinding as FragmentHomeBinding
@@ -44,9 +49,29 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
   override fun onInit(view: View, fragmentArg: Bundle?, saveInstance: Bundle?) {
     setupClick()
-    initAdmobBanner()
     initAndLoadRewardAd()
     initAndLoadAdMobInterstitial()
+    loadAds()
+    setUpListener()
+  }
+
+  private fun loadAds() {
+    activity?.let {
+      if (!NetworkHelper.isNetworkConnected(it) || mIsStartLoadAd) {
+        if (!ConstantUtil.AdConstant.ALLOW_SHOW_ADMOB_BANNER) {
+          viewBinding.layoutAd.visibility = View.GONE
+        }
+        return
+      }
+      mIsStartLoadAd = true
+      initAdmobBanner()
+    }
+  }
+
+  private fun setUpListener() {
+    homeViewModel.networkStatus.observe(viewLifecycleOwner) {
+      loadAds()
+    }
   }
 
   private fun setupClick() {
@@ -113,25 +138,34 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //        return
 //      }
       viewBinding.layoutAd.beVisible()
-      bannerAdGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
-        val density = AppUtil.getScreenDensity(it)
-        val width = viewBinding.layoutAd.width
-        val height = viewBinding.layoutAd.height
-        LogUtil.logMessage("Admob", "Size banner width =$width maxHeight=$height")
-        if (width == 0 || height == 0) {
-          return@OnGlobalLayoutListener
-        }
+      val width = viewBinding.layoutAd.width
+      val height = viewBinding.layoutAd.height
+      val density = AppUtil.getScreenDensity(it)
+
+      if (width > 0 && height > 0) {
         viewBinding.bannerView.adModBanner.setAdSize(
           AdSize.getInlineAdaptiveBannerAdSize((width / density).toInt(), (height / density).toInt())
         )
-        bannerAdGlobalListener?.let { listener ->
-          viewBinding.layoutAd.viewTreeObserver.removeOnGlobalLayoutListener(listener)
-        }
-        bannerAdGlobalListener = null
         loadAdMobBanner()
+      } else {
+        bannerAdGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
+          val width = viewBinding.layoutAd.width
+          val height = viewBinding.layoutAd.height
+          LogUtil.logMessage("Admob", "Size banner width =$width maxHeight=$height")
+          if (width == 0 || height == 0) {
+            return@OnGlobalLayoutListener
+          }
+          viewBinding.bannerView.adModBanner.setAdSize(
+            AdSize.getInlineAdaptiveBannerAdSize((width / density).toInt(), (height / density).toInt())
+          )
+          bannerAdGlobalListener?.let { listener ->
+            viewBinding.layoutAd.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+          }
+          bannerAdGlobalListener = null
+          loadAdMobBanner()
+        }
+        viewBinding.layoutAd.viewTreeObserver.addOnGlobalLayoutListener(bannerAdGlobalListener)
       }
-
-      viewBinding.layoutAd.viewTreeObserver.addOnGlobalLayoutListener(bannerAdGlobalListener)
     }
   }
 

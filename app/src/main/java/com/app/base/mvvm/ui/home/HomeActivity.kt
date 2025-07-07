@@ -41,6 +41,10 @@ class HomeActivity : BaseActivity(R.layout.activity_home) {
     // listenerOnBackPress()
   }
 
+  override fun connectedNetwork() {
+    viewModel.updateNetworkStatus(true)
+  }
+
   private fun listenerOnBackPress() {
     onBackPressedDispatcher.addCallback(
       this,

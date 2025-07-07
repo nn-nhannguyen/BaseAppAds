@@ -1,7 +1,9 @@
 package com.app.base.mvvm.base
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
@@ -28,6 +30,7 @@ import com.app.base.mvvm.arch.extensions.hideKeyboard
 import com.app.base.mvvm.data.source.LoadingState
 import com.app.base.mvvm.ui.splash.SplashAppActivity
 import com.app.base.mvvm.utils.LogUtil
+import com.app.base.mvvm.utils.NetworkHelper
 import com.app.base.mvvm.view.dialog.AlertDialog
 import com.app.base.mvvm.view.dialog.BaseDialogFragment
 import com.app.base.mvvm.view.dialog.LoadingDialog
@@ -54,6 +57,8 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
   private var adView: AdView? = null
   private var alertDialog: AlertDialog? = null
   private var allowDismissLoading = true
+  private var mConnectionReceiver: ConnectionReceiver? = null
+  private var mConnectionIntentFilter: IntentFilter? = null
 
   private val anchorSnackBar: View
     get() = findViewById(android.R.id.content)
@@ -78,6 +83,13 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
 
     mLoadingDialog = LoadingDialog(this)
     mSwipeInterface = Slidr.attach(this)
+
+    mConnectionReceiver = ConnectionReceiver()
+    mConnectionIntentFilter = IntentFilter().apply {
+      addAction("android.net.conn.CONNECTIVITY_CHANGE")
+      addAction("android.net.wifi.WIFI_STATE_CHANGED")
+    }
+    registerReceiver(mConnectionReceiver, mConnectionIntentFilter)
 
     setEnableSlidr(false)
 
@@ -546,6 +558,14 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
     super.onDestroy()
     mIsDestroy = true
     adView?.destroy()
+
+    try {
+      if (mConnectionIntentFilter != null && mConnectionReceiver != null) {
+        unregisterReceiver(mConnectionReceiver)
+      }
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
   }
 
   fun allDismissLoading(): Boolean {
@@ -562,5 +582,19 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int) : AppCompatActivity() 
 
   companion object {
     private const val TOUCH_POINT = 20f
+  }
+
+  abstract fun connectedNetwork()
+
+  inner class ConnectionReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent) {
+      if (intent.action == null || context == null) {
+        return
+      }
+
+      if (NetworkHelper.isNetworkConnected(context)) {
+        connectedNetwork()
+      }
+    }
   }
 }

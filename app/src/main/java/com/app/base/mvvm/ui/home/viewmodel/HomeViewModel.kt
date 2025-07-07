@@ -16,8 +16,15 @@ class HomeViewModel @Inject constructor(private val mainRepository: MainReposito
   val users: LiveData<Resource<List<User>>>
     get() = _users
 
+  private val _networkStatus = MutableLiveData<Boolean>()
+  val networkStatus: LiveData<Boolean> = _networkStatus
+
   init {
     getInformation()
+  }
+
+  fun updateNetworkStatus(connect: Boolean) {
+    _networkStatus.value = connect
   }
 
   private fun getInformation() {

@@ -74,6 +74,10 @@ class SplashAppActivity : BaseActivity(R.layout.activity_splash) {
     }
   }
 
+  override fun connectedNetwork() {
+
+  }
+
   private fun openHome(bundle: Bundle?) {
     Handler(Looper.getMainLooper()).postDelayed({
       waitSplashScreen = false
